@@ -1,0 +1,91 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head profile="http://purl.org/uF/2008/03/ http://purl.org/uF/hAtom/0.1/">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="author" content="cacaoweb devel team" />
+  <meta name="copyright" content="Copyright © 2003 - 2009 cacaoweb devel team" />
+  <link rel="copyright" href="license.html" />
+  <title>cacaoweb</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/cacaoweb.api.css" />
+  <link rel="stylesheet" type="text/css" href="css/slimbox.css" media="screen" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="vcs-svn" href="https://cacaoweb.svn.sourceforge.net/svnroot/cacaoweb/trunk/cacaoweb" title="cacaoweb svn repository" />
+  <link rel="vcs-browse" href="http://cacaoweb.svn.sourceforge.net/viewvc/cacaoweb/" title="cacaoweb svn repository browser" />
+  <meta http-equiv="X-Generated" content="Tue, 04 Aug 2009 13:22:04 GMT" />
+  <meta name="robots" content="index, follow" />
+ </head>
+ <body>
+  <div id="header">
+  </div>
+  <div id="body">
+  
+  <h2 id="publishing">cacaoweb for videos or files publishers</h2>
+  <h3>Uploading files</h3>
+  <p>
+	To distribute your files through the cacaoweb network, you have two options :
+	<ul>
+     <li>Upload your files through cacaoweb interface</li>
+	 <p>
+	 In this case, cacaoweb will upload your file as it is on the cacaoweb network. If you're uploading videos for streaming, your video needs to be in a format compatible with Flash streaming, which is :
+	 <ul>
+		<li>FLV ; or</li>
+		<li>MP4 with metadata at the beginning of the file. (if you don't know how to do it, it will be easier to use cacaoweb second upload option futher down)</li>
+	</ul>
+	</p>
+	<p>
+	Once you have your files ready, and provided cacaoweb is running on your computer, you can upload them through the cacaoweb web interface on the <a href="http://localhost:4001/admin.html">administration page</a>. Or you can also use the command line interface with the -u or -upload switch :
+	 <pre>
+	$ ./cacaoweb -u MyFile1.zip -u MyNewMovie-Bdrip.mp4
+	$ ./cacaoweb -upload myTVShow.S05E14.mp4</pre>
+	 </p>
+	 
+	 <p>Or you can use cacaoweb's web API like this :
+	 <pre>
+	 $ wget http://localhost:4001/upload?filepath=/home/JohnDoe/Movies/MyNewMovie-Bdrip.mp4
+	 $ wget http://localhost:4001/upload?filepath=/home/JohnDoe/MyFiles/myTVShow.S05E14.mp4</pre>
+	 </p>
+	 <p>
+	 At any time you can check your uploads status by querying the page :
+	 <pre>
+	 $ wget http://localhost:4001/uploads</pre>
+	 </p>
+	 <p>Which will provide you with an XML document featuring all your current uploads and various information regarding their status.</p>
+	 <p>Once the file has been successfully uploaded, you can get its cacaoweb link by going to the cacaoweb administration interface and click on "show link", or you can figure it out by yourself : </p>
+	 <pre>
+	 $ ./cacaoweb -md5 MyFile1.zip
+	 $ ./cacaoweb -md5 MyNewMovie-Bdrip.mp4</pre>
+	 <p>and then the link will just be <tt>http://localhost:4001/?f=MD5_OF_THE_FILE</tt> where MD5_OF_THE_FILE should be replaced with the actual MD5 of the file.</p>
+	 <p>After having successfully uploaded a file, you might want to remove the upload. To do this :</p>
+	 <pre>
+	 $ wget http://localhost:4001/removeupload?f=MD5_OF_THE_FILE</pre>
+	 <p>and the upload will be removed (but the file is still accessible in the cacaoweb network).</p>
+	 <p></p>
+     <li><p>Use a cacaoweb uploading service like our partner <a href="http://www.h264stage.com/">H264Stage.com</a> that will do everything for you automatically.</p><p>A hosting service will take care for you of the file format transcoding to make any video available for streaming and will upload the video automatically, providing you at the end with the cacaoweb link.</li>
+	</ul>
+  </p>
+	<p>There is no way to remove a file from the cacaoweb network.</p>
+	
+	<h3>Sharing the link</h3>
+	<p>Once you have uploaded a file or a video and you got its link, either through the option "Show link" if you uploaded the file through cacaoweb, or in the h264stage.com interface if you used <a href="http://www.h264stage.com/">h264stage.com</a> to upload your file, you can share the link with all your friends, family, or even put the link on links directories on the internet.</p>
+	<p>There are two types of links provided by cacaoweb:
+	<ul>
+		<li>a direct link, like this one <tt>http://localhost:4001/?f=20B5A05913E0825BF423BE968E31F527</tt>. People can click on this link and the file will be download automatically.</li>
+		<li>an embed link. It's a whole html code used for videos or music files so the content can be played in Flash on the host website. Typically, you would use the embed link when you want to add your link to a link directory website, so they can integrate it in their website. Internet links directories usually ask you for this type of link so they can integrate it in their website.</li>
+	</ul>
+	</p>
+  <p>See our <a href="http://forum.cacaoweb.org/">forum</a> for more information or to get help</p>
+  
+
+		
+		
+<div class="clearer"></div>
+</div>
+  <ul id="footer">
+    <li>Copyright © 2003 - 2009 <span class="vcard"><a class="url org fn" href="team.html">
+        cacaoweb devel team</a></span></li>
+  </ul>
+ </body>
+</html>
