@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
  <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>cacaoweb API for webmasters</title>
+  <title>cacaoweb Javascript API for webmasters</title>
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
@@ -21,72 +21,125 @@
   
   <p><a href="webmasters_api_fr.html">en français, cliquez ici</a></p>
   
-  <h2 id="websites">cacaoweb for websites</h2>
+  <h2 id="websites">cacaoweb for websites - Javascript API</h2>
 	<p>
-		If you have a website, you can use cacaoweb to show various types of content to your users, like videos, files or music. cacaoweb API for webmasters allows you to seamlessly integrate this content into your website. For example, you can provide your users with videos from Megavideo without any time limit or videos from cacaoweb in HD quality.
+		You can use cacaoweb Javascript API to integrate and interact cacaoweb content in your websites, like videos, files or music. For example, you can provide your users with videos from Megavideo without any time limit or videos from cacaoweb in HD quality, all this through a simple javascript interface.
 	</p>
 
   <h2>Contents</h2>
   <ul>
-	<li><a href="">Requirements</a></li>
-	<li><a href="">Initialization</a></li>
+	<li><a href="#reqs">Requirements</a></li>
+	<li><a href="#gettingstarted">Getting started</a></li>
 	<li>
-		<a href="">Functions reference</a>
+		<a href="#funref">API functions reference</a>
 		<ul>
-			<li><a href="">Subtitles</a></li>
-			<li></li>
+			<li><a href="#refintegrating">Integrating with cacaoweb</a></li>
+			<li><a href="#refplay">Playing videos</a></li>
+			<li><a href="#refsubs">Subtitles</a></li>
 		</ul>
 	</li>
-	
-	<li><a href="">Examples</a></li>
+	<li><a href="#examples">Examples</a></li>
   </ul>
   
 
 
 <h3>API description</h3>
-<p></p>
-
-
-<h4>Requirements</h4>
-<p>You need to include our javascript API in your HTML page. To download our API, click <a href="js/cacaoweb-2.13.js">here</a> (cacaoweb-2.13.js). You need to include this file in your webpage (preferably at the end of the &lt;body&gt;) with the following html code:
-<pre class="sh_html">
-&lt;script type="text/javascript" src="cacaoweb-2.13.js"&gt;&lt;/script&gt;
-</pre>
+<p>
 </p>
 
-<h4>API functions</h4>
-<p>The main functions of the API are:
-<pre class="sh_javascript">
-/** check for all cacaoweb blocks inside the page and play them with the Flash player. 
-    Only applicable if the links are videos or music. */
-Cacaoweb.checkandplay(); 
 
-/** to know whether cacaoweb is running on the host machine */
+<h3 id="reqs">Requirements</h3>
+<p>As cacaoweb javascript API relies on javascript, javascript needs to be enabled in the browser.</p>
+<p>You need to include our javascript API in your HTML page. To download our API, click <a href="js/cacaoweb-2.13.js">here</a> (cacaoweb-2.13.js). You need to include this file in your webpage (preferably at the end of the &lt;body&gt;) with the following html code:
+<pre class="sh_html">
+&lt;script src="cacaoweb-2.13.js"&gt;&lt;/script&gt;
+</pre>
+</p>
+<p>All the examples below are defined in HTML5 syntax, please adapt the syntax if you need to support older browsers.</p>
+
+<h3 id="gettingstarted">Getting started</h3>
+<h4>Playing a video</h4>
+Here is all that's needed to play a video link in a webpage.
+<pre class="sh_html">
+&lt;html&gt;
+&lt;body&gt;
+	
+	&lt;div id="mymovie" cacaolink="http://127.0.0.1:4001/?f=25614a53c9bcd3c537bb28a11174785f"&gt;&lt;/div&gt;
+	
+	
+	&lt;script src="cacaoweb-2.13.js"&gt;&lt;/script&gt;
+	&lt;script&gt;		
+		cacaoplayer("mymovie").play(); // plays the block with id "mymovie"
+	&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<h4>Explanation:</h4>
+<p>
+The &lt;div&gt; part (the "cacaoweb block") is where the video will be played. As you can see it is just a empty div block with 2 properties:
+	<ul>
+		<li>id : to give a name to this cacaoweb block so you can reference it later in your javascript code</li>
+		<li>(optional) cacaolink : tell which link should be play by default (it can be replaced by something else in later API calls)</li>
+	</ul>
+</p>
+<p>
+At the end of the body, we first insert the cacaoweb API file, then call an API function.</p>
+<p>
+cacaoplayer("mymovie") selects or create a player object that will be inside the div block.</p>
+<p>
+cacaoplayer("mymovie").play() plays the video.
+</p>
+
+
+<p>	
+</p>
+
+<h3 id="funref">API functions reference</h3>
+<h4 id="refintegrating">Integrating with cacaoweb</h4>
+<p>The javascript "Cacaoweb" global object exposes a few functions to help you integrate cacaoweb content easily. For example, a common requirement is to be able to detect whether cacaoweb is running on the user's computer or not. If it's not, we can prompt the user with a download button or image, for example we can replace the player by a "missing plugin" image, inviting the user into download cacaoweb.
+<pre class="sh_javascript">
+/** 
+ * to find out whether cacaoweb is running on the host machine 
+ * your callback_function will be like:
+ *   function mycallback(cacaowebstatus) {
+ *     ...
+ *   }
+ * the parameter "cacaowebstatus" will be set by the cacaoweb API to one out of 3 possible values:
+ *   - "On" (cacaoweb is running on the user's computer)
+ *   - "Off" (cacaoweb is not running on the user's computer)
+ *   - "Unknown" (we don't know if cacaoweb is running yet - 
+         it can take up to 2 sec to know whether cacaoweb is running or not)
+ **/
 Cacaoweb.subscribeStatusChange(callback_function);
 
-/** downloads cacaoweb (useful only if the user doesn't have cacaoweb installed, 
-    you can check that with Cacaoweb.subscribeStatusChange() */
+/** downloads cacaoweb (to use if the user doesn't have cacaoweb installed, 
+    you can check the status in your callback from Cacaoweb.subscribeStatusChange(yourcallbackfunction) */
 Cacaoweb.download();
 </pre>
 </p>
 
-<p>The format of cacaoweb blocks is defined below. More information about how to use these functions in the examples below.</p>
 
-<h4>API parameters</h4>
+<h4>Global API parameters</h4>
 <p>
+These parameters will apply globally to all the videos, but can be changed separately for each video
 <pre class="sh_javascript">
 Cacaoweb.videowidth = 640; /** width of the player */
 Cacaoweb.videoheight = 360; /** height of the player */
 Cacaoweb.autoplay = true; /** whether the video plays without the user pressing the play button */
 /** the image showing up when cacaoweb is not installed on the host computer */
 Cacaoweb.missingpluginimage = 'http://www.cacaoweb.org/images/plugin.png'; 
+/** the path to the player, you can change this if you want to have your own player */
+Cacaoweb.playerurl = 'http://127.0.0.1:4001/player.swf';
 </pre>
 </p>
 <p>These properties can be changed at any time after the cacaoweb javascript API is loaded.</p>
 
-<h4>Megavideo, Videobb and cacaoweb links</h4>
+
+<h4 id="refplay">Playing videos</h4>
+This is the most important part. But before we introduce the API, let's have a look at the format of the link that you need to feed cacaoweb with. Depending on where the video is hosted, a different link format will apply, as explained below.
+<h5>Links format</h5>
 <p>
-cacaoweb can plays videos from cyberlockers like megavideo or videobb without any time limits, to do this you need to translate the links to the cacaoweb format by using the following conversion table:
+cacaoweb can plays videos from cyberlockers like megavideo or videobb without time limits, to do this you need to translate the links to the cacaoweb format using the following conversion table:
 </p>
 	<table>
 		<thead>
@@ -103,9 +156,14 @@ cacaoweb can plays videos from cyberlockers like megavideo or videobb without an
 			<td><code>http://127.0.0.1:4001/megavideo/megavideo.caml?videoid=PTHE7UWL</code></td>
 		</tr>
 		<tr>
-			<td>videobb</td>
+			<td>Videobb</td>
 			<td><code>http://www.videobb.com/video/uGR5SO24apvI</code></td>
 			<td><code>http://127.0.0.1:4001/videobb/videobb.caml?videoid=uGR5SO24apvI</code></td>
+		</tr>
+		<tr>
+			<td>Videozer</td>
+			<td><code>http://www.videozer.com/video/KjGkI</code></td>
+			<td><code>http://127.0.0.1:4001/videozer/videozer.caml?videoid=KjGkI</code></td>
 		</tr>
 		<tr>
 			<td>cacaoweb</td>
@@ -115,58 +173,49 @@ cacaoweb can plays videos from cyberlockers like megavideo or videobb without an
 		</tbody>
 	</table>
 
-<h4>Playing links on your webpages - cacaoweb blocks</h4>
+<h5>API functions to control the flash player</h5>
 <p>
-The API allows you to play all cacaoweb blocks of your webpage, and provide the users with a download link to cacaoweb when they don't have cacaoweb installed.
+There are just a few fonctions to control the player, as exposed below:
 </p>
-<p>
-A cacaoweb block is some html code like the following:
-<pre class="sh_html">
-&lt;div cacaolink="http://127.0.0.1:4001/?f=25614a53c9bcd3c537bb28a11174785f"&gt;&lt;/div&gt;
+<pre class="sh_javascript">
+cacaoplayer("yourmovie"); // references the player object in div "yourmovie"
+cacaoplayer("yourmovie").play(); // plays the link given be property "cacaolink"
+cacaoplayer("yourmovie").play("http://127.0.0.1:4001/?f=25614a53c9bcd3c537bb28a11174785f"); // play this link
+cacaoplayer("yourmovie").pause(); // pause playback
+cacaoplayer("yourmovie").mute(); // mute the sound volume
+cacaoplayer("yourmovie").showmessage("welcome"); // shows a message in the player
 </pre>
-</p>
 
-<h4>Add subtitles to videos</h4>
-<p>You can add any subtitles to a video. For example, if your subtitles file is located at address <code>http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt</code> and the subtitle is synchronized with the video, the link becomes:
-<pre class="sh_html">
-http://127.0.0.1:4001/?f=685bee87cb93dd01351889c4fab2a3fe&subtitlesurl=http://uploads.
-cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt&subtitleslanguage=it&subtitlesoffset=0
+<p>Before you play a link, you can change the player parameters for this link, like with the following:</p>
+<pre class="sh_javascript">
+// setup player options
+cacaoplayer("yourmovie").setup({ playerurl : "player.swf", width : 640, height : 360 });
+</pre>
+
+<p>When you call the setup fonction, each parameter is optional. We don't describe the meaning of these parameters as their name is already self-explanatory</p>
+
+<h4 id="refsubs">Add subtitles to videos</h4>
+<p>You can add any subtitles to a video. For example, if your subtitles file is located at address <code>http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt</code> and the subtitle is synchronized with the video, you can use:
+
+<pre class="sh_javascript">
+// setup the subtitles
+cacaoplayer("yourmovie").subtitles({ subtitlesurl : 
+      "http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt", subtitleslanguage : 'it', 
+      subtitlesoffset : 0 });
+cacaoplayer("yourmovie").subtitles({ 
+             subtitlesurl : "http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt" });
 </pre>
 </p>
 <p>Here we added 3 parameters, subtitlesurl, subtitleslanguage and subtitlesoffset. subtitlesoffset is a float used to synchronize the subtitles track with the video, it's given in seconds.</p>
+<p>The parameter subtitlesurl is required. Other parameters are optional.</p>
 
 <h3>Examples</h3>
-
-<h4>Integration of different types of cacaoweb links in a webpage:</h4>
-
-<pre class="sh_html">
-&lt;html&gt;
-&lt;body&gt;
-	
-	&lt;!-- a cacaoweb link --&gt;
-	&lt;div cacaolink="http://127.0.0.1:4001/?f=25614a53c9bcd3c537bb28a11174785f"&gt;&lt;/div&gt;
-	
-	
-	&lt;!-- a megavideo link --&gt;
-	&lt;div cacaolink="http://127.0.0.1:4001/megavideo/megavideo.caml?videoid=SJSG90C2"&gt;&lt;/div&gt;
-
-	
-	
-	&lt;script type="text/javascript" src="cacaoweb-2.12.js"&gt;&lt;/script&gt;
-	&lt;script type="text/javascript"&gt;		
-		Cacaoweb.checkandplay();
-	&lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</pre>
-<p>The script tags added at the end of the body allow the replacement of the cacaoweb "div" blocks by the actual videos in Flash. That's all you need to do.</p>
 
 <h4>Tell if cacaoweb is running on the host machine:</h4>
 
 <pre class="sh_html">		
-	&lt;script type="text/javascript" src="cacaoweb-2.12.js"&gt;&lt;/script&gt;
-	&lt;script type="text/javascript"&gt;		
+	&lt;script src="cacaoweb-2.13.js"&gt;&lt;/script&gt;
+	&lt;script&gt;		
 		Cacaoweb.subscribeStatusChange(function(status){ 
 			if (status == 'Off') {
 				alert('cacaoweb is not installed');
@@ -201,25 +250,6 @@ The cacaoweb link is in "flashvars". Simply insert the embed code in your webpag
 <p>
 You also may want to check if cacaoweb is installed on the user's computer, and prompt him with a download button for cacaoweb if it's not. You can check in Ajax whether cacaoweb is installed simply by requesting a page like <code>http://127.0.0.1:4001/isrunning</code>, if cacaoweb is installed then the success method will be called back immediately.
 </p>
-
-<h4>Flashvars options available in cacaoweb player</h4>
-<p>The following options are available in cacaoweb flash player:
-<pre class="sh_javascript">
-/** to prevent the player from autoplaying, set dontplay at 1 */
-dontplay = 1; 
-
-/** set these three variables to handle subtitles */
-subtitlesurl = [url_to_subtitle];
-subtitleslanguage = [language of the subtitle]; /* (in the future the cacaoweb player will offer a way to choose subtitles based on the language */
-subtitlesoffset = [a float to offset the subtitles track in time];
-</pre></p>
-<p>set the flashvars field in the html embed code like the following to use these options:
-<pre class="sh_html">
-"file=http://127.0.0.1:4001/megavideo/megavideo.caml?videoid=PTHE7UWL&dontplay=1&subtitlesurl=
-  http://127.0.0.1:4001/?f=3452f9qe8bc0e&subtitleslanguage=en&subtitlesoffset=1.5"
-</pre>
-</p>
-
 		
 <div class="clearer"></div>
 </div>
