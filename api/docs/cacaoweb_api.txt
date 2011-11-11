@@ -1,0 +1,64 @@
+
+
+  HOW TO CALL THE API FUNCTIONS
+
+    The API is called through http calls on the cacaoweb http server.
+	
+	For example, to get the current version of the running cacaoweb instance:
+	  # curl http://localhost:4001/version
+	"curl" can be replaced by "wget" or any http-aware client.
+	It can also be called within a browser by pasting the url in the address bar.
+	
+	All the API functions can be called through a url like the following:
+	  http://localhost:4001/[name_of_the_api_function]
+
+  UPLOADING
+  
+    1. Direct Upload
+	  
+	  Direct upload means that the file will be uploaded from your computer to the cacaoweb network without any intermediary.
+	  It is uploaded in p2p fashion to the cacaoweb network and thus the progress is not linear like with a standard upload to a server.
+	  It also takes a longer time to upload a file in p2p (however downloads can be a lot faster in p2p).
+	
+	  * Basic Usage
+	  
+	  
+		- to upload a local file:
+		  
+		/upload?filepath=PATH_TO_YOUR_FILE
+		  
+		where PATH_TO_YOUR_FILE is the full path to the file you want to upload
+	  
+	  
+		- to get progress for the current uploads:
+		
+		/uploads
+		
+		this gives you a list of current uploads in XML format
+		
+		
+		- to remove an upload (for example once the progress has reached 100%):
+		
+		/removeupload?f=MD5_OF_THE_FILE
+		
+		where MD5_OF_THE_FILE is the md5 of the file, given by the /uploads function
+	  
+	  * Paid files
+	  
+	  http parameters
+	  
+	  metadata (price)
+	
+	2. Remote Upload
+      
+	  * What is it?
+	    Allows to upload videos hosted on other platforms to the cacaoweb platforms.
+        Currently supported platforms for remote upload are megavideo, videobb and videozer.
+		
+	  * API functions
+	  
+
+  OTHER FUNCTIONS:
+  
+  /digest 		: gives the md5 of the cacaoweb executable
+  /version		: gives the version of the cacaoweb executable
