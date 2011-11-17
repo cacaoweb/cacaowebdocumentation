@@ -122,9 +122,14 @@
   
   STARTUP PARAMETERS FOR CACAOWEB INSTANCE:
   
+  These command lines options can be used to customize cacaoweb behavior.
+  
+  usage: $ ./cacaoweb [options list]
+  
+  
   -port [PORT]		: specifies which port to bind cacaoweb http server to
   -ip [IP]			: specifies which ip address to bind cacaoweb http server to
   -appdirectory [PATH_TO_LOCAL_DIRECTORY] 
 					: specifies the directory used by cacaoweb to store its file (downloads, etc.)
-  
+  -noplayer			: launches cacaoweb without launching the browser
   
