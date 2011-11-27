@@ -14,8 +14,8 @@
   <div id="body">
   
   
-  <h2>WHAT IS CACAOWEB HTTP API</h2>
-  <p>introduction to the http api</p>
+  <h2>CACAOWEB HTTP API REFERENCE</h2>
+  <p>The cacaoweb API allows you to get control over your cacaoweb instance through HTTP calls. These calls can be made from the command line, a program, or even a webpage through the html <code>script</code> tag.</p>
   
   <h2>HOW TO CALL THE API FUNCTIONS</h2>
   <ul>
@@ -24,7 +24,7 @@
 	
 	<p>For example, to get the current version of the running cacaoweb instance:</p>
 	  <p><code>$ curl http://localhost:4001/version</code></p>
-	<p>"curl" can be replaced by "wget" or any http-aware client.
+	<p>"curl" can be replaced by "wget" or any http-aware client. You can install curl on debian linux or derivatives by typing <code>apt-get install curl</code> at a command prompt.
 	It can also be called within a browser by pasting the url in the address bar. We give the command on a Unix-like system, you need to adapt it if your operating system is Windows.</p>
    </li>
 	<li>
@@ -50,18 +50,20 @@
 	  It is uploaded in p2p fashion to the cacaoweb network and thus the progress is not linear like with a standard upload to a ftp or http server.
 	  It also takes a longer time to upload a file in p2p (twice or 3 times as long). However downloads are usually a lot faster in p2p.</p>
   
-      <h4>Basic Usage</h4>
+      <h4>Functions for Basic Usage</h4>
 	  
 	  <ul>
 	    <li>
-		<p>upload a local file:</p>
 		<p><code>/upload?filepath=[PATH_TO_THE_FILE]</code></p>
 		<p>where [PATH_TO_THE_FILE] is the full path to the local file you want to upload</p>
+		<p>To upload a local file.</p>
+		<p>Example:</p>
+		<p><code>curl http://localhost:4001/upload?filepath=/home/robert/movies/Avatar.720p.BDRip.mp4</code>
 		</li>
 		<li>
-		<p>get the current list of uploads and their progress:</p>
 		<p><code>/uploads</code></p>
 		<p>this gives you a list of current uploads in XML format</p>
+		<p>To get the current list of uploads and their progress:</p>
 		</li>
 		<li>
 		<p>remove an upload:</p>
@@ -69,20 +71,76 @@
 		<p>where [MD5_OF_THE_FILE] is the md5 of the file, given by the /uploads function.<br>
 		It just stops the cacaoweb client from uploading this file and removes it from the list of current uploads.
 		If the file is already on the cacaoweb network (if the progress has reach 100%), the file will reachable on cacaoweb network.</p>
+		<p>Example:</p>
+		<p><code>curl http://localhost:4001/removeupload?f=c9cd88165575ca8cb8da5b963e81e6ec</code>
 		</li>
 	  </ul>
 	  
 	  
-	  <h4>Paid Files</h4>
+	  <h4>Functions for Paid Files upload</h4>
 	  
 	  <ul>
 	    <li>
-		<p>upload a local file for pay-per-download:</p>
 		<p><code>/upload?filepath=[PATH_TO_THE_FILE]&restricted=[RESTRICTED]&previewallowed=[PREVIEWALLOWED]</code></p>
+		<p>To upload a local file for pay-per-download</p>
 		<p>this allows to upload a file for pay-per-view:<br>
 		  - you can specify "true" for the parameter "restricted" to make it a paid file<br>
 		  - you can specifiy "true" for the parameter "previewallowed" if you still want people to watch the first few minutes of the file for free (after that, they need to buy the file in order to continue with viewing the file)</p>
+		<p>Example:</p>
+		<p><code>curl http://localhost:4001/upload?filepath=/home/robert/movies/Avatar.720p.BDRip.mp4&restricted=true&previewallowed=true</code></p>
+		<p>Files uploaded as free files <em>cannot</em> be converted to paid files later on.</p>
+		
+		<p>Once the file is uploaded, you need to set up the price (in the cacaoweb credits unit) people will have to pay to get it.
+		By default the price is 0, which means the file can be downloaded for free.
+		You can set up any price you want. Once a price > 0 is set up, users <em>have to</em> pay to access the content. You can change the price at any time.</p>
+		
+		<p>To upload the price of your file, you need to upload it to the cacaoweb central metadata repository. The price is part of the metadata of the file, which also include the title of the file and other optional fields such as the year of release, season, episode, language, subtitles, etc.</p>
+		
+		<p>[TO DO: DOCUMENT HOW TO UPLOAD METADATA TO CACAOWEB CENTRAL METADATA REPOSITORY]</p>
+		</li>
+	  </ul>
 	  
+	<h3>Remote Upload</h3>
+	<p>Remote upload allows to upload videos hosted on other platforms to the cacaoweb platforms.
+        Currently supported platforms for remote upload are megavideo, videobb and videozer.</p>
+		
+	<h4>API functions</h4>
+	<ul>
+	  <li>
+	  <p><code>/remoteupload?provider=[PROVIDER]&videoid=[VIDEOID]</code></p>
+	  
+	  <p>parameter [VIDEOID] :		This remote-uploads the video with video id [VIDEOID]</p>
+	  <p>parameter [PROVIDER] :	This is an integer to specify the host for this file.
+								0 = megavideo
+								1 = videobb
+								2 = videozer</p>
+								
+	  <p>Example:</p>
+	  <p><code>curl http://127.0.0.1:4001/remoteupload?provider=1&videoid=Gy85jo9Pg7st</code></p>
+	
+	  </li>
+	</ul>
+	  
+	  
+	<h3>Other Functions</h3>
+	<ul>
+	  <li>
+	    <p><code>/downloads</code></p>
+		<p>To get the list of current downloads in XML format</p>
+      </li>
+	  <li>
+		<p><code>/digest</code></p>
+		<p>To get the md5 of the cacaoweb executable</p>
+	  </li>
+      <li>
+		<p><code>/version</code></p>
+		<p>To get the version of the cacaoweb instance</p>
+	  </li>
+      <li>
+		<p><code>/exit</code></p>
+		<p>To shut down the cacaoweb instance</p>
+	  </li>
+	</ul>
   
   </div>
  </div>
