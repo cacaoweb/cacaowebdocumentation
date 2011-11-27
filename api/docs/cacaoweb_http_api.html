@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>cacaoweb HTTP API</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+ </head>
+ <body>
+  <div id="header">
+  </div>
+ <div class=wrapper>
+  <div id="body">
+  
+  
+  <h2>WHAT IS CACAOWEB HTTP API</h2>
+  <p>introduction to the http api</p>
+  
+  <h2>HOW TO CALL THE API FUNCTIONS</h2>
+  <ul>
+  <li>
+      <p>The API is called through http calls on the cacaoweb http server.</p>
+	
+	<p>For example, to get the current version of the running cacaoweb instance:</p>
+	  <p><code>$ curl http://localhost:4001/version</code></p>
+	<p>"curl" can be replaced by "wget" or any http-aware client.
+	It can also be called within a browser by pasting the url in the address bar. We give the command on a Unix-like system, you need to adapt it if your operating system is Windows.</p>
+   </li>
+	<li>
+	<p>API functions can be called through a url like the following:</p>
+	  <p><code>http://localhost:4001/[name_of_the_api_function]</code> <br>
+	  or <br>
+	  <code>http://127.0.0.1:4001/[name_of_the_api_function]</code></p>
+	  
+	  <p>cacaoweb is the default port where it is listening to. It can be changed, see below in "Startup Parameters For Cacaoweb Instance".</p>
+	 </li>
+	 </ul>
+	  
+  <h2>UPLOADING</h2>
+  
+    <p>Any file can be uploaded to the cacaoweb P2P network.
+	Once a file is uploaded, it cannot be deleted.<br>
+	There are essentially two ways to upload content on cacaoweb network:</p>
+	
+	
+	<h3>Direct Upload</h3>
+	
+	  <p>"Direct upload" means that the file is directly uploaded from your computer to the cacaoweb network without any intermediary.
+	  It is uploaded in p2p fashion to the cacaoweb network and thus the progress is not linear like with a standard upload to a ftp or http server.
+	  It also takes a longer time to upload a file in p2p (twice or 3 times as long). However downloads are usually a lot faster in p2p.</p>
+  
+      <h4>Basic Usage</h4>
+	  
+	  <ul>
+	    <li>
+		<p>upload a local file:</p>
+		<p><code>/upload?filepath=[PATH_TO_THE_FILE]</code></p>
+		<p>where [PATH_TO_THE_FILE] is the full path to the local file you want to upload</p>
+		</li>
+		<li>
+		<p>get the current list of uploads and their progress:</p>
+		<p><code>/uploads</code></p>
+		<p>this gives you a list of current uploads in XML format</p>
+		</li>
+		<li>
+		<p>remove an upload:</p>
+		<p><code>/removeupload?f=[MD5_OF_THE_FILE]</code></p>
+		<p>where [MD5_OF_THE_FILE] is the md5 of the file, given by the /uploads function.<br>
+		It just stops the cacaoweb client from uploading this file and removes it from the list of current uploads.
+		If the file is already on the cacaoweb network (if the progress has reach 100%), the file will reachable on cacaoweb network.</p>
+		</li>
+	  </ul>
+	  
+	  
+	  <h4>Paid Files</h4>
+	  
+	  <ul>
+	    <li>
+		<p>upload a local file for pay-per-download:</p>
+		<p><code>/upload?filepath=[PATH_TO_THE_FILE]&restricted=[RESTRICTED]&previewallowed=[PREVIEWALLOWED]</code></p>
+		<p>this allows to upload a file for pay-per-view:<br>
+		  - you can specify "true" for the parameter "restricted" to make it a paid file<br>
+		  - you can specifiy "true" for the parameter "previewallowed" if you still want people to watch the first few minutes of the file for free (after that, they need to buy the file in order to continue with viewing the file)</p>
+	  
+  
+  </div>
+ </div>
+ </body>
+</head>
+</html>
+
