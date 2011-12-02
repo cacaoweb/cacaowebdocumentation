@@ -39,6 +39,7 @@
 		</ul>
 	</li>
 	<li><a href="#examples">Examples</a></li>
+	<li><a href="#embed">HTML embed code without the JS API</a></li>
   </ul>
   
 
@@ -121,7 +122,7 @@ Cacaoweb.download();
 
 <h4>Global API parameters</h4>
 <p>
-These parameters will apply globally to all the videos, but can be changed separately for each video
+These parameters will apply globally to all the videos, but can be changed separately for each video. We also provide the default values of these parameters below.
 <pre class="sh_javascript">
 Cacaoweb.videowidth = 640; /** width of the player */
 Cacaoweb.videoheight = 360; /** height of the player */
@@ -146,7 +147,7 @@ cacaoweb can plays videos from cyberlockers like megavideo or videobb without ti
 		<tr>
 			<th>provider</th>
 			<th>link</th>
-			<th>cacaoweb form</th>
+			<th>cacaoweb format</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -197,21 +198,25 @@ cacaoplayer("yourmovie").setup({ playerurl : "player.swf", width : 640, height :
 <p>When you call the setup fonction, each parameter is optional. We don't describe the meaning of these parameters as their name is already self-explanatory</p>
 
 <h4 id="refsubs">Add subtitles to videos</h4>
-<p>You can add any subtitles to a video. For example, if your subtitles file is located at address <code>http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt</code> and the subtitle is synchronized with the video, you can use:
+<p>You can add any subtitles to a video. For example, if your subtitles file is located at address <code>http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt</code> and the subtitle is desynchronized with the video of 1.8s, you can use:
 
 <pre class="sh_javascript">
 // setup the subtitles
 cacaoplayer("yourmovie").subtitles({ subtitlesurl : 
       "http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt", subtitleslanguage : 'it', 
-      subtitlesoffset : 0 });
+      subtitlesoffset : 1.8 });
 cacaoplayer("yourmovie").subtitles({ 
              subtitlesurl : "http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt" });
 </pre>
 </p>
-<p>Here we added 3 parameters, subtitlesurl, subtitleslanguage and subtitlesoffset. subtitlesoffset is a float used to synchronize the subtitles track with the video, it's given in seconds.</p>
-<p>The parameter subtitlesurl is required. Other parameters are optional.</p>
+<p>Here we added 3 parameters:
+<ul>
+  <li><code>subtitlesurl</code>: specify the url of the subtitle (usually in .srt format)</li>
+  <li><code>subtitleslanguage</code> (optional): the language code of the subtitle</li>
+  <li><code>subtitlesoffset</code> (optional): the synchronisation offset between the audio track and the subtitles in seconds. If they are synchronised, there is no need to provide this parameter.</li>
+</ul></p>
 
-<h3>Examples</h3>
+<h3 id="examples">Examples</h3>
 
 <h4>Tell if cacaoweb is running on the host machine:</h4>
 
@@ -230,7 +235,7 @@ cacaoplayer("yourmovie").subtitles({
 	&lt;/script&gt;
 </pre>
 
-<h3>Bypassing the API - inserting Flash embed code directly</h3>
+<h3 id="embed">Bypassing the API - inserting Flash embed code directly</h3>
 <p>You don't need to use our javascript API to power your website with cacaoweb. If you want to do things your way, here is how it would go:</p>
 
 <h4>Flash embed code for cacaoweb links</h4>
@@ -252,6 +257,22 @@ The cacaoweb link is in "flashvars". Simply insert the embed code in your webpag
 <p>
 You also may want to check if cacaoweb is installed on the user's computer, and prompt him with a download button for cacaoweb if it's not. You can check in Ajax whether cacaoweb is installed simply by requesting a page like <code>http://127.0.0.1:4001/isrunning</code>, if cacaoweb is installed then the success method will be called back immediately.
 </p>
+
+<h4>Flash embed code with subtitles</h4>
+<p>You can add subtitles to your videos directly by change the "flashvars" item like in the following embed code:</p>
+<pre class="sh_html">
+&lt;object width="640" height="360"&gt;
+	&lt;param name="allowFullScreen" value="true" /&gt;
+	&lt;param name="flashvars" value="file=http://127.0.0.1:4001/megavideo/megavideo.caml?videoid=PTHE7UWL&subtitlesurl=
+	http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt&subtitleslanguage=it&subtitlesoffset=1.5" /&gt;
+	&lt;param name="movie" value="http://127.0.0.1:4001/player.swf" /&gt;
+	&lt;embed src="http://127.0.0.1:4001/player.swf" 
+        flashvars="file=http://127.0.0.1:4001/megavideo/megavideo.caml?videoid=PTHE7UWL&subtitlesurl=
+		http://uploads.cacaoweb.org/subs/The.Lincoln.Lawyer.it.srt&subtitleslanguage=it&subtitlesoffset=1.5" 
+        width="640" height="360" allowFullScreen="true" /&gt;
+&lt;/object&gt;
+</pre>
+<p>The parameters used - <code>subtitlesurl</code>, <code>subtitleslanguage</code>, <code>subtitlesoffset</code> - are the same as in the API defined earlier.</p>
 		
 <div class="clearer"></div>
 </div>
