@@ -26,6 +26,7 @@
 	  <p><code>$ curl http://localhost:4001/version</code></p>
 	<p>"curl" can be replaced by "wget" or any http-aware client. You can install curl on debian linux or derivatives by typing <code>apt-get install curl</code> at a command prompt.
 	It can also be called within a browser by pasting the url in the address bar. We give the command on a Unix-like system, you need to adapt it if your operating system is Windows.</p>
+	<p>Throughout the API, files hosted on the cacaoweb network are referenced by an unique identifier, which is simply the MD5 digest of the file being hosted. Links are build with this ID, and every API function dealing with a particular file refers to this ID.</p>
    </li>
 	<li>
 	<p>API functions can be called through a url like the following:</p>
@@ -124,6 +125,10 @@
 	  
 	<h3>Other Functions</h3>
 	<ul>
+	  <li>
+	    <p><code>/filemetadata?f=[MD5_OF_THE_FILE]</code></p>
+		<p>To get the metadata of the file (XML format). This can be used to see if a link exists on the cacaoweb network, or to get the title of a file. If the file doesn't exist on the cacaoweb network, this call returns after a few seconds and the result is empty.</p>
+      </li>
 	  <li>
 	    <p><code>/downloads</code></p>
 		<p>To get the list of current downloads in XML format</p>
