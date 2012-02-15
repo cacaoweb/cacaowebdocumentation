@@ -1,0 +1,99 @@
+
+
+  SETTING UP A TRANSCODING AND UPLOADING SERVER FOR CACAOWEB
+  
+  
+  This document explains how to set up your transcoding server, the following procedure is 
+  given as an example that you can adapt to your own needs.
+  Once files are transcoded, they need to be uploaded to the cacaoweb network, which is 
+  also explained in this document.
+
+  
+  
+    WHY TRANSCODE VIDEOS?
+  
+    Even though there is no restriction with what can play cacaoweb files, users feel more
+	comfortable with using the Flash player. 
+	The Flash player currently supports 2 formats, mp4 and flv.
+	Both format are supported by cacaoweb, however flv currently allows for more 
+	flexibility than mp4.
+	Therefore it is usually preferable to transcode the files into the flv container format.
+	
+	
+	
+	HOW TO TRANSCODE?
+	
+	  1. Server setup
+	    
+		- any flavor of linux, preferably 64bits.
+		- lots of RAM and CPU, multicores are welcome.
+		
+		software:
+		- ffmpeg and x264 (install from the latest sources)
+		- yamdi (install from the latest sources)
+		- curl
+		
+		
+		How to install ffmpeg and x264?
+		This guide is quite good: http://ubuntuforums.org/showthread.php?t=786095
+		But probably only applies to Ubuntu or Debian.
+		Make sure you get the ffmpeg and x264 versions from their git repositories
+		
+		
+	  2. Transcoding files
+	    
+		The script "convert.sh" handles the conversion.
+		You use this script as follows:
+		
+		# ./convert.sh myfilename.mkv
+		
+		at the command prompt, where myfilename.mkv is the file you want to transcode.
+		
+		
+		Here is a rough explanation of how it works:
+		
+		1) the script convert.sh creates a temporary directory and copies the source file in there
+		2) we do a 2-pass encoding on the file, with a target bitrate of 850 (good for 720p quality,
+		   but for lower quality you can target 500)
+		3) metadata is added to the result with yamdi
+		4) directory is cleaned up
+		
+		
+	
+	
+	HOW TO UPLOAD?
+	
+	  Once your file is transcoded, you need to upload it to the cacaoweb network.
+	  To do this, you need to have an instance of cacaoweb running on your server, then call
+	  cacaoweb through its http api so it will upload the file.
+	  
+	  1. Launch cacaoweb
+	  
+	  You can launch cacaoweb like this:
+	  
+	  ./cacaoweb.linux
+	  
+	  
+	  2. Upload the file
+	  
+	  You can call the http API to upload the file like this:
+	  
+	  # curl http://localhost:4001/upload?filepath=/myfiles/myfilename.flv&restricted=false&previewallowed=false
+	  
+	  
+	  Please refer to http://www.cacaoweb.org/api/docs/cacaoweb_http_api.html
+	  
+	  Your file will be uploaded in a p2p fashion.
+	  
+	  
+	  3. Check the upload status
+	  
+	  You can call the following function from the http API to query the upload status:
+	  
+	  # curl http://localhost:4001/uploads
+	  
+	  It provides a list of all uploads with an XML format.
+	  
+	  
+	
+	
